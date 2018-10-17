@@ -17,6 +17,12 @@ var blocks = {
     'Rotating': 'Moving in a circle around its center'
 };
 
+// Delete route
+app.delete('/blocks/:name', function(req, res) {
+   delete blocks[req.blockName];
+   res.sendStatus(200);
+});
+
 // Routes can take multiple handlers as args and will
 // call them sequentially
 app.post('/blocks', parseUrlencoded, function(req, res) {
