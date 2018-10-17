@@ -6,12 +6,30 @@
 // of this to the variable app
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+// extended: false  --> forces the use of the native querystring Node lib.
+var parseUrlencoded = bodyParser.urlencoded({ extended: false });
+
 
 var blocks = {
     'Fixed': 'Fastened securely in position', 
     'Movable': 'Capable of being moved', 
     'Rotating': 'Moving in a circle around its center'
 };
+
+// Routes can take multiple handlers as args and will
+// call them sequentially
+app.post('/blocks', parseUrlencoded, function(req, res) {
+    // return form data
+    var newBlock = req.body;
+    
+    // each element in the form becomes a property
+    // add new block to the Block object
+    blocks[newBlock.name] = newBlock.description;
+    
+    // set the 201 created status code
+    res.status(201).json(newBlock.name);
+});
 
 var locations = {
     'Fixed': 'First floor', 
