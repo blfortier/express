@@ -7,37 +7,19 @@
 var express = require('express');
 var app = express();
 
-// get function creates a route that accepts HTTP get requests
+/*app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/index.html');
+});*/
 
-app.get('/', function(req, res) {
-    // response object sends back text 'Hello world'
-    // res.send('Hello world'); --> using Express API
-    // res.write and res.end are Node functions
-     res.write('Hello world');
-     res.end();
-});
+// add middleware to the application stack
+app.use(express.static('public'));
 
+
+// ?? Why is there no folder called blocks?
 app.get('/blocks', function(req, res) {
-    // redirecting a path
-    // status code 301 shows the path was moved permanently
-    res.redirect(301, '/parts');
-    
-    // passing an array
-    // var blocks = ['Fixed', 'Movable', 'Rotating'];
-    // res.json(blocks);
-    // the send function converts objects and arrays to JSON
-    // JS Object Notation
-    // res.send(blocks);
-    
-    // passing a string to the send function (not typical)
-    var blocks = '<ul><li>Fixed</li><li>Movable</li></ul>';
-    res.send(blocks);
-    
-    
+   var blocks = ['Fixed', 'Movable', 'Rotating'];
+   res.json(blocks); 
 });
-
-
-
 
 
 app.listen(8080, function() {
