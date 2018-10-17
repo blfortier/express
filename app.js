@@ -13,9 +13,31 @@ var blocks = {
     'Rotating': 'Moving in a circle around its center'
 };
 
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+var locations = {
+    'Fixed': 'First floor', 
+    'Moveable': 'Second floor',
+    'Rotating': 'Penthouse'
+};
+
+// the app.param function maps placeholders to callback functions
+// It's  useful for runing pre=conditions on dynamic routes
+app.param('name', function(req, res, next) {
+    var name = req.params.name;
+    var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+    
+    // properties set on the request object can be accessed
+    // from all subsequent routes in the application
+    req.blockName = block;
+    
+    next();
 });
+
+
+
+
+/*app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/index.html');
+});*/
 
 // add middleware to the application stack
 app.use(express.static('public'));
@@ -28,13 +50,14 @@ app.get('/blocks', function(req, res) {
    if (req.query.limit >= 0) {
        res.json(blocks.slice(0, req.query.limit));
    } else {
-       res.json(blocks); 
+       res.json(Object.keys(blocks)); 
    }
 });
 
 // create a dynamic route
 app.get('/blocks/:name', function(req, res) {
-    var description = blocks[req.params.name];
+    var description = blocks[req.blockName];
+    
     // handle error if no property is found for a given Block name
     // check for presence of a description
     if (!description) {
@@ -45,6 +68,29 @@ app.get('/blocks/:name', function(req, res) {
     }
    
 });
+
+
+app.get('/locations/:name', function(req, res) {
+   // var name = req.params.name;
+   // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+    var location = locations[req.blockName];
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
